@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UnifiX - Fixing Campus, One Report at a Time</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">🏢 UnifiX</div>
+      <div class="hamburger" id="hamburger">☰</div>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#" class="active" data-target="dashboard">Dashboard</a></li>
+      <li><a href="#" data-target="report-issue">Report Issue</a></li>
+      <li><a href="#" data-target="issue-board">Issue Board</a></li>
+      <li><a href="#" data-target="heatmap">Heatmap</a></li>
+      <li><a href="#" data-target="my-reports">My Reports</a></li>
+      <li><a href="#" data-target="admin-dashboard">Maintenance</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="notification-icon" id="notif-icon">
+        🔔<span class="badge" id="notif-badge">3</span>
+        <div class="notif-dropdown" id="notif-dropdown"></div>
+      </div>
+      <div class="user-profile">
+        <div class="avatar">I</div>
+        <span>Ishan</span>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="page active">
+      <div class="hero">
+        <h1>Make Your Campus Better.</h1>
+        <p>Report campus problems, track progress, and help your college fix issues faster.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="navigateTo('report-issue')">+ Report a Problem</button>
+          <button class="btn-secondary" onclick="navigateTo('issue-board')">View Issue Board</button>
+        </div>
+      </div>
+      <h2 class="section-title">Campus Statistics</h2>
+      <div class="stats-grid" id="stats-container">
+        <!-- Stats injected via JS -->
+      </div>
+    </section>
+
+    <!-- Report Issue Section -->
+    <section id="report-issue" class="page">
+      <h2 class="section-title">Report a Problem</h2>
+      <div id="duplicate-warning" class="hidden alert">
+        <p>Looks like this problem has already been reported.</p>
+        <div id="duplicate-details"></div>
+      </div>
+      <form id="report-form" class="card">
+  <div class="form-group">
+    <label>Problem Description</label>
+    <textarea id="issue-desc" rows="4" required placeholder="Describe the problem... e.g., 'Water is leaking heavily from the ceiling...'"></textarea>
+    <!-- THE NEW AI BUTTON -->
+    <button type="button" id="ai-magic-btn" class="btn-primary w-full mt-1" style="background: linear-gradient(45deg, #8B5CF6, #3B82F6); margin-top: 10px;">
+      ✨ Use AI to Auto-Fill Details
+    </button>
+  </div>
+
+  <div class="form-group">
+    <label>Generated Title</label>
+    <input type="text" id="issue-title" required placeholder="AI will generate a title, or type one here">
+  </div>
+
+  <div class="form-group">
+    <label>Problem Category</label>
+    <select id="issue-category" required>
+      <option value="" disabled selected>Select a category</option>
+      <option value="🪑 Furniture">🪑 Furniture</option>
+      <option value="💡 Electricity">💡 Electricity</option>
+      <option value="🚿 Washroom">🚿 Washroom</option>
+      <option value="📶 Wi-Fi">📶 Wi-Fi</option>
+      <option value="🧹 Cleaning">🧹 Cleaning</option>
+      <option value="❄️ AC / Fan">❄️ AC / Fan</option>
+      <option value="🔧 Other">🔧 Other</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group flex-1">
+      <label>Severity</label>
+      <select id="issue-severity">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+        <option value="Critical">Critical</option>
+      </select>
+    </div>
+    <div class="form-group flex-1">
+      <label>Location / Room</label>
+      <input type="text" id="issue-room" required placeholder="e.g., Block B, Room 204">
+    </div>
+  </div>
+
+  <button type="submit" class="btn-primary w-full" style="margin-top: 15px;">Submit Report</button>
+</form>    </section>
+
+    <!-- Issue Board Section -->
+    <section id="issue-board" class="page">
+      <div class="board-header">
+        <h2 class="section-title">Issue Board</h2>
+        <div class="filters">
+          <input type="text" id="search-issue" placeholder="Search issues...">
+          <select id="filter-category">
+            <option value="All">All Categories</option>
+            <option value="🪑 Furniture">Furniture</option>
+            <option value="💡 Electricity">Electricity</option>
+            <option value="🚿 Washroom">Washroom</option>
+            <option value="📶 Wi-Fi">Wi-Fi</option>
+            <option value="❄️ AC / Fan">AC / Fan</option>
+          </select>
+          <select id="filter-status">
+            <option value="All">All Statuses</option>
+            <option value="Reported">Reported</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Fixed">Fixed</option>
+          </select>
+        </div>
+      </div>
+      <div class="issue-grid" id="issues-container"></div>
+    </section>
+
+    <!-- Heatmap Section -->
+    <section id="heatmap" class="page">
+      <h2 class="section-title">Campus Heatmap</h2>
+      <p class="subtitle">Visual representation of issue density across campus.</p>
+      <div class="legend">
+        <span class="legend-item"><span class="color-box bg-green"></span> Low</span>
+        <span class="legend-item"><span class="color-box bg-yellow"></span> Moderate</span>
+        <span class="legend-item"><span class="color-box bg-orange"></span> High</span>
+        <span class="legend-item"><span class="color-box bg-red"></span> Critical</span>
+      </div>
+      <div class="heatmap-grid" id="heatmap-container"></div>
+    </section>
+
+    <!-- My Reports Section -->
+    <section id="my-reports" class="page">
+      <h2 class="section-title">My Reports</h2>
+      <div class="issue-grid" id="my-reports-container"></div>
+    </section>
+
+    <!-- Admin/Maintenance Section -->
+    <section id="admin-dashboard" class="page">
+      <h2 class="section-title">Maintenance Dashboard</h2>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Issue</th>
+              <th>Location</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Issue Details Modal -->
+  <div class="modal-overlay" id="issue-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Issue Details</h3>
+        <button class="close-btn" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-content"></div>
+      
+      <div class="tracker-container">
+        <h4>Progress Tracker</h4>
+        <div class="tracker" id="modal-tracker">
+          <div class="track-step" id="step-reported"><div class="dot"></div><span>Reported</span><small id="time-reported"></small></div>
+          <div class="track-line" id="line-1"></div>
+          <div class="track-step" id="step-assigned"><div class="dot"></div><span>Assigned</span><small id="time-assigned"></small></div>
+          <div class="track-line" id="line-2"></div>
+          <div class="track-step" id="step-work"><div class="dot"></div><span>Work Started</span><small id="time-work"></small></div>
+          <div class="track-line" id="line-3"></div>
+          <div class="track-step" id="step-fixed"><div class="dot"></div><span>Fixed</span><small id="time-fixed"></small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Notification message</div>
+  
+
+<!-- UnifiX AI Chatbot -->
+<div id="ai-chatbot">
+    <button id="chat-toggle" aria-label="Open AI chatbot">
+        💬
+    </button>
+
+    <div id="chat-window" class="chat-hidden">
+        <div class="chat-header">
+            <div>
+                <strong>UnifiX AI</strong>
+                <small>Campus Support Assistant</small>
+            </div>
+            <button id="chat-close" aria-label="Close chatbot">×</button>
+        </div>
+
+        <div id="chat-messages">
+            <div class="bot-message">
+                Hey! 👋 I'm UnifiX AI. How can I help you with campus issues?
+            </div>
+        </div>
+
+        <form id="chat-form">
+            <input
+                id="chat-input"
+                type="text"
+                placeholder="Ask about campus issues..."
+                autocomplete="off"
+                required
+            >
+            <button type="submit">➤</button>
+        </form>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
